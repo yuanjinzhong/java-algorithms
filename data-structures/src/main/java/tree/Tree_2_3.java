@@ -17,7 +17,7 @@ public class Tree_2_3 {
             root = new Node_2_3(e);
         } else {
             root = insert(e, root);
-            if (root.number == 3) {
+            if (root.numbers == 3) {
                 root = split(root, null);
             }
         }
@@ -33,7 +33,7 @@ public class Tree_2_3 {
         }
 
         Node_2_3 child = null;
-        if (parent.number == 1) {
+        if (parent.numbers == 1) {
             if (e < parent.getMinItem()) {
                 child = insert(e, parent.getLeft());
             } else {
@@ -49,25 +49,37 @@ public class Tree_2_3 {
             }
         }
 
-        if (child.number == 3) {
+        if (child.numbers == 3) {
             return this.split(child, parent);
         }
 
         return parent;
     }
 
+    //拆分，就是将中间元素晋升成父节点
     private Node_2_3 split(Node_2_3 node, Node_2_3 parent) {
         if (parent == null) {
+            //整了一个空的父节点出来，node和parent是父子关系了
             parent = new Node_2_3(node);
         }
+        //将中间元素，晋升到上面空的父节点
         parent.insert(node.getMiddleItem());
 
+        //将老节点的第1、3元素拆成新节点，并且这个新节点关联老节点的子节点
         Node_2_3[] newNodes = this.triangle(node);
+        //以上父节点，新的2个子节点创建了，但是还没建立关联，关联之
         this.replaceChild(parent, node, newNodes[0], newNodes[1]);
 
         return parent;
     }
 
+    /**
+     * 新的父亲节点与2个新的子节点关联
+     * @param parent
+     * @param oldChild
+     * @param child01
+     * @param child02
+     */
     private void replaceChild(Node_2_3 parent, Node_2_3 oldChild, Node_2_3 child01, Node_2_3 child02) {
         if (oldChild == parent.children[0]) {
             parent.children[3] = parent.children[2];
@@ -93,11 +105,13 @@ public class Tree_2_3 {
      * \---- 1
      */
     private Node_2_3[] triangle(Node_2_3 node) {
+        //创建一个能存放2个元素的数组
         Node_2_3[] newNodes = new Node_2_3[2];
-
+        //老节点的第一个、第三个元素值构建新的节点
         newNodes[0] = new Node_2_3(node.items[0]);
         newNodes[1] = new Node_2_3(node.items[2]);
 
+        //依据老节点，构建了2个新节点，则老节点的孩子节点也不能丢，也要关联起来
         if (!node.isLeaf()) {
             // 左孩子
             newNodes[0].children[0] = node.children[0];
@@ -204,8 +218,8 @@ public class Tree_2_3 {
 
         // 元素
         public int[] items;
-        // 序号
-        public int number;
+        // 元素个数
+        public int numbers;
         // 孩子
         public Node_2_3[] children;
         // 父亲
@@ -213,7 +227,7 @@ public class Tree_2_3 {
 
         public Node_2_3() {
             this.items = new int[3];
-            this.number = 0;
+            this.numbers = 0;
             this.children = new Node_2_3[4];
             this.parent = null;
         }
@@ -221,7 +235,7 @@ public class Tree_2_3 {
         public Node_2_3(int item) {
             this();
             this.items[0] = item;
-            this.number = 1;
+            this.numbers = 1;
         }
 
         public Node_2_3(Node_2_3 child){
@@ -230,14 +244,14 @@ public class Tree_2_3 {
         }
 
         public void insert(int e) {
-            int idx = this.number - 1;
+            int idx = this.numbers - 1;
             while (idx >= 0) {
                 if (this.items[idx] < e) break;
                 this.items[idx + 1] = this.items[idx];
                 --idx;
             }
             this.items[idx + 1] = e;
-            ++this.number;
+            ++this.numbers;
         }
 
         public boolean isLeaf(){

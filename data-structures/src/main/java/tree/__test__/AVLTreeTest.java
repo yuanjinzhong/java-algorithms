@@ -127,4 +127,15 @@ public class AVLTreeTest {
         System.out.println(tree);
     }
 
+
+    @Test
+    public void test_for_debug() {
+        AVLTree avlTree = new AVLTree();
+        avlTree.insert(1);
+        avlTree.insert(3);
+        avlTree.insert(2);
+        //这个case会先向右旋转3节点，再向左循转1节点（RL循转）
+        System.out.println(avlTree);
+    }
+
 }
