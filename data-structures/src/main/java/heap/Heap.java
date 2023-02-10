@@ -62,7 +62,7 @@ public class Heap<E> implements IHeap<E> {
 
 
     /**
-     * 大小顶堆{@linkplain 通用 }的方法，
+     * 大小顶堆{@linkplain 通用 }的方法， 插入元素
      * <p>重点在于子类实现的方法</p>
      * <pre>{@code
      * if (compareTo(x, (E) e) >= 0) {
@@ -137,7 +137,7 @@ public class Heap<E> implements IHeap<E> {
 
 
     /**
-     * 小顶堆删除元素
+     * 删除元素
      * @param k
      * @param x
      */
