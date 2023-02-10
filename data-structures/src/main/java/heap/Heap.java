@@ -60,6 +60,20 @@ public class Heap<E> implements IHeap<E> {
         siftUpComparable(k, x);
     }
 
+
+    /**
+     * 大小顶堆{@linkplain 通用 }的方法，
+     * <p>重点在于子类实现的方法</p>
+     * <pre>{@code
+     * if (compareTo(x, (E) e) >= 0) {
+     *     logger.info("【入队】值比对，父节点：{} 目标节点：{}", JSON.toJSONString(e), JSON.toJSONString(x));
+     *       break;
+     *
+     * }}</pre>
+     *
+     * @param k
+     * @param x
+     */
     @SuppressWarnings("unchecked")
     private void siftUpComparable(int k, E x) {
         logger.info("【入队】元素：{} 当前队列：{}", JSON.toJSONString(x), JSON.toJSONString(queue));
@@ -68,7 +82,23 @@ public class Heap<E> implements IHeap<E> {
             int parent = (k - 1) >>> 1;
             logger.info("【入队】寻找当前节点的父节点位置。k：{} parent：{}", k, parent);
             Object e = queue[parent];
-            // 如果当前位置元素，大于父节点元素，则退出循环
+            /**
+             * 具体需要看这个方法的实现
+             * 构造大顶堆的情况下，什么时候会推出循环？？？
+             *
+             * parent节点e,大于当前插入的x，则不需要调整，则退出循环
+             *
+             *
+             * 构造小顶堆的情况下，什么时候会退出循环？？
+             *
+             * 当前插入的x 大于parent节点，则不需要调整，则退出循环
+             *
+             *
+             * 综上可得，{@link  MaxHeap#compareTo(Integer, Integer)}的实现，必须是parent.compareTo(x)
+             *
+             * {@link  MinHeap#compareTo(Integer, Integer)} 的实现，必须是x.compareTo(parent)
+             *
+             */
             if (compareTo(x, (E) e) >= 0) {
                 logger.info("【入队】值比对，父节点：{} 目标节点：{}", JSON.toJSONString(e), JSON.toJSONString(x));
                 break;
@@ -105,6 +135,12 @@ public class Heap<E> implements IHeap<E> {
         siftDownComparable(k, x);
     }
 
+
+    /**
+     * 小顶堆删除元素
+     * @param k
+     * @param x
+     */
     @SuppressWarnings("unchecked")
     private void siftDownComparable(int k, E x) {
         // 先找出中间件节点
@@ -114,7 +150,7 @@ public class Heap<E> implements IHeap<E> {
             int child = (k << 1) + 1;
             Object c = queue[child];
             int right = child + 1;
-            // 左子节点与右子节点比较，取最小的节点
+            // 左子节点与右子节点比较，取最小的节点--将小的提上去，这是小顶堆
             if (right < size && compareTo((E) c, (E) queue[right]) > 0) {
                 logger.info("【出队】左右子节点比对，获取最小值。left：{} right：{}", JSON.toJSONString(c), JSON.toJSONString(queue[right]));
                 c = queue[child = right];
@@ -139,7 +175,7 @@ public class Heap<E> implements IHeap<E> {
         return (size == 0) ? null : (E) queue[0];
     }
 
-    public int compareTo(E firstElement, E secondElement) {
+    public int compareTo(E currentElement, E parentElement) {
         throw new RuntimeException("未实现 compareTo 方法");
     }
 
